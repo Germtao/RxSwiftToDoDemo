@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxSwift
 
 let kTodoCellID = "TodoItem"
 let CELL_TODO_TITLE_TAG = 1002
@@ -15,7 +16,8 @@ let TODO_ITEMS_KEY = "TodoItems"
 
 class TodoListViewController: UIViewController {
     
-    var todoItems: [TodoItem] = []
+    let todoItems = Variable<[TodoItem]>([])  // 变成Variable
+    let bag = DisposeBag()  // 用于回收取消订阅的DisposeBag对象
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var clearBtn: UIButton!
@@ -26,26 +28,27 @@ class TodoListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
+        
+        // 由于todoItems是一个Subject，作为一个observer，我们修改它的值，就相当于它自己订阅到了事件
+        // 而要响应值的修改，我们就把它当作一个observable直接订阅就好了
+        todoItems.asObservable().subscribe(onNext: { [weak self] todos in
+            // update UI
+            self?.updateUI(todos: todos)
+        }).disposed(by: bag)
     }
     
     required init?(coder aDecoder: NSCoder) {
-        todoItems = [TodoItem]()
         super.init(coder: aDecoder)
         loadTodoItems()
-        
     }
     
     @IBAction func addTodoItem(_ sender: UIBarButtonItem) {
-        let newRowIndex = todoItems.count
         let todoItem = TodoItem(name: "Todo Demo", isFinished: false)
-        todoItems.append(todoItem)
-        let indexPath = IndexPath(row: newRowIndex, section: 0)
-        tableView.insertRows(at: [indexPath], with: .automatic)
+        todoItems.value.append(todoItem)
     }
     
     @IBAction func clearTodoList(_ sender: UIButton) {
-        todoItems = [TodoItem]()
-        tableView.reloadData()
+        todoItems.value.removeAll()
     }
     
     @IBAction func saveTodoList(_ sender: UIButton) {
@@ -56,7 +59,7 @@ class TodoListViewController: UIViewController {
 extension TodoListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) {
-            let todo = todoItems[indexPath.row]
+            let todo = todoItems.value[indexPath.row]
             todo.toggleFinished()
             configureStatus(for: cell, with: todo)
         }
@@ -64,19 +67,18 @@ extension TodoListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        todoItems.remove(at: indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .automatic)
+        todoItems.value.remove(at: indexPath.row)
     }
 }
 
 extension TodoListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todoItems.count
+        return todoItems.value.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: kTodoCellID, for: indexPath)
-        let todo = todoItems[indexPath.row]
+        let todo = todoItems.value[indexPath.row]
         
         configureLabel(for: cell, with: todo)
         configureStatus(for: cell, with: todo)
@@ -85,7 +87,7 @@ extension TodoListViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - 配置cell
+// MARK: - 配置cell & 更新UI
 extension TodoListViewController {
     private func configureLabel(for cell: UITableViewCell, with item: TodoItem) {
         let label = cell.viewWithTag(CELL_TODO_TITLE_TAG) as! UILabel
@@ -95,6 +97,10 @@ extension TodoListViewController {
     private func configureStatus(for cell: UITableViewCell, with item: TodoItem) {
         let label = cell.viewWithTag(CELL_CHECKMARK_TAG) as! UILabel
         label.text = item.isFinished ? "✅" : ""
+    }
+    
+    private func updateUI(todos: [TodoItem]) {
+        tableView.reloadData()
     }
 }
 
@@ -106,7 +112,7 @@ extension TodoListViewController {
         
         if let data = try? Data(contentsOf: path) {
             let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
-            todoItems = unarchiver.decodeObject(forKey: TODO_ITEMS_KEY) as! [TodoItem]
+            todoItems.value = unarchiver.decodeObject(forKey: TODO_ITEMS_KEY) as! [TodoItem]
             unarchiver.finishDecoding()
         }
     }
@@ -115,7 +121,7 @@ extension TodoListViewController {
     private func saveTodoItems() {
         let data = NSMutableData()
         let archiver = NSKeyedArchiver(forWritingWith: data)
-        archiver.encode(todoItems, forKey: TODO_ITEMS_KEY)
+        archiver.encode(todoItems.value, forKey: TODO_ITEMS_KEY)
         archiver.finishEncoding()
         data.write(to: dataFilePath(), atomically: true)
     }
