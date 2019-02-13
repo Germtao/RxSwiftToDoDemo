@@ -54,6 +54,23 @@ class TodoListViewController: UIViewController {
     @IBAction func saveTodoList(_ sender: UIButton) {
         saveTodoItems()
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let nav = segue.destination as! UINavigationController
+        let currVc = nav.topViewController as! TodoDetailViewController
+        
+        if segue.identifier == "AddTodo" {
+            currVc.title = "Add Todo"
+            // 实现订阅事件
+            currVc.todo.subscribe(onNext: { [weak self] (newTodo) in
+                self?.todoItems.value.append(newTodo)
+            }) {
+                print("Finish adding a new todo")
+            }.disposed(by: currVc.bag)
+        } else if segue.identifier == "EditTodo" {
+            currVc.title = "Edit Todo"
+        }
+    }
 }
 
 extension TodoListViewController: UITableViewDelegate {
