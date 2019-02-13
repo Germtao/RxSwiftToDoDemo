@@ -62,24 +62,35 @@ class TodoListViewController: UIViewController {
         if segue.identifier == "AddTodo" {
             currVc.title = "Add Todo"
             // 实现订阅事件
-            currVc.todo.subscribe(onNext: { [weak self] (newTodo) in
+            _ = currVc.todo.subscribe(onNext: { [weak self] (newTodo) in
                 self?.todoItems.value.append(newTodo)
-            }) {
-                print("Finish adding a new todo")
-            }.disposed(by: currVc.bag)
+                }, onDisposed: {
+                    print("Finish adding a new todo")
+            })
         } else if segue.identifier == "EditTodo" {
             currVc.title = "Edit Todo"
+            // 获取点击cell的indexPath
+            if let indexPath = tableView.indexPath(for: sender as! UITableViewCell) {
+                currVc.todoItem = todoItems.value[indexPath.row]
+                // 实现订阅事件
+                _ = currVc.todo.subscribe(onNext: { [weak self] (todoItem) in
+                    self?.todoItems.value[indexPath.row] = todoItem
+                    }, onDisposed: {
+                        print("Finish editing a todo")
+                })
+            }
         }
     }
 }
 
 extension TodoListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) {
-            let todo = todoItems.value[indexPath.row]
-            todo.toggleFinished()
-            configureStatus(for: cell, with: todo)
-        }
+//        if let cell = tableView.cellForRow(at: indexPath) {
+//            let todo = todoItems.value[indexPath.row]
+//            todo.toggleFinished()
+//            todoItems.value[indexPath.row] = todo
+//            configureStatus(for: cell, with: todo)
+//        }
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
