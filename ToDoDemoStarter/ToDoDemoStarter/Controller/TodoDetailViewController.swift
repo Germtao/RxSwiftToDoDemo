@@ -29,9 +29,22 @@ class TodoDetailViewController: UITableViewController {
         super.viewWillAppear(animated)
         
         todoName.becomeFirstResponder()
-        todoItem = TodoItem()
+        if let todoItem = todoItem {
+            self.todoItem.name = todoItem.name
+            self.todoItem.isFinished = todoItem.isFinished
+        } else {
+            todoItem = TodoItem()
+        }
         
         print("Resource tracing: \(RxSwift.Resources.total)")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // 2. 主流方法: 对于一个Observable来说，除了所有订阅者都取消订阅会导致其被回收之外，
+        //            Observable自然结束（onCompleted）或发生错误结束（onError）也会自动让所有订阅者取消订阅，
+        //            并导致Observable占用的资源被回收
+        todoSubject.onCompleted()
     }
     
     @IBAction func cancel(_ sender: UIBarButtonItem) {
