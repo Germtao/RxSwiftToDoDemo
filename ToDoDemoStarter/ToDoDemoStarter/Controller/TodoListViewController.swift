@@ -61,6 +61,26 @@ class TodoListViewController: UIViewController {
         print("RC: \(RxSwift.Resources.total)")
     }
     
+    @IBAction func syncTodoList(_ sender: UIButton) {
+        _ = syncTodoToCloud().subscribe(onNext: {
+            self.flash(title: "成功", message: "所有任务同步在iCloud的: \($0)")
+        }, onError: { (error) in
+            switch error {
+            case SaveTodoError.iCloudIsNotEnable:
+                self.flash(title: "失败", message: "请确保iCloud可用!")
+            case SaveTodoError.cannotReadLocalFile:
+                self.flash(title: "失败", message: "没有读取到本地文件!")
+            case SaveTodoError.cannotCreateFileOnCloud:
+                self.flash(title: "失败", message: "不能创建文件在iCloud!")
+            default: break
+            }
+        }, onDisposed: {
+            print("SyncOb dispose")
+        })
+        
+        print("RC: \(RxSwift.Resources.total)")
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let nav = segue.destination as! UINavigationController
         let currVc = nav.topViewController as! TodoDetailViewController

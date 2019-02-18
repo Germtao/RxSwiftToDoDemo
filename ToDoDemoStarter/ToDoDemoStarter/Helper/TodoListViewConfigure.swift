@@ -20,25 +20,29 @@ enum SaveTodoError: Error {
 
 extension TodoListViewController {
     /// 同步任务到iCloud
-    func syncTodoToCloud() {
-        guard let cloudUrl = ubiquityURL(plistPath) else {
-            flash(title: "失败", message: "请设置iCloud可用！")
-            return
-        }
-        guard let localData = NSData(contentsOf: dataFilePath()) else {
-            flash(title: "失败", message: "不能加载本地文件！")
-            return
-        }
-        
-        let plist = PlistDocument(fileURL: cloudUrl, data: localData)
-        plist.save(to: cloudUrl, for: .forOverwriting) { (success: Bool) in
-            print(cloudUrl)
-            if success {
-                self.flash(title: "成功", message: "所有的任务已同步到cloud！")
-            } else {
-                self.flash(title: "失败", message: "任务同步到cloud失败！")
+    func syncTodoToCloud() -> Observable<URL> {
+        return Observable.create({ (observer) -> Disposable in
+            guard let cloudUrl = self.ubiquityURL(plistPath) else {
+                observer.onError(SaveTodoError.iCloudIsNotEnable)
+                return Disposables.create()
             }
-        }
+            guard let localData = NSData(contentsOf: self.dataFilePath()) else {
+                observer.onError(SaveTodoError.cannotReadLocalFile)
+                return Disposables.create()
+            }
+            
+            let plist = PlistDocument(fileURL: cloudUrl, data: localData)
+            plist.save(to: cloudUrl, for: .forOverwriting) { (success: Bool) in
+                print(cloudUrl)
+                if success {
+                    observer.onNext(cloudUrl)
+                    observer.onCompleted()
+                } else {
+                    observer.onError(SaveTodoError.cannotCreateFileOnCloud)
+                }
+            }
+            return Disposables.create()
+        })
     }
 }
 
