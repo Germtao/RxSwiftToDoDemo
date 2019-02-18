@@ -83,46 +83,14 @@ class TodoListViewController: UIViewController {
     }
 }
 
-extension TodoListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        if let cell = tableView.cellForRow(at: indexPath) {
-//            let todo = todoItems.value[indexPath.row]
-//            todo.toggleFinished()
-//            todoItems.value[indexPath.row] = todo
-//            configureStatus(for: cell, with: todo)
-//        }
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        todoItems.value.remove(at: indexPath.row)
-    }
-}
-
-extension TodoListViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todoItems.value.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: kTodoCellID, for: indexPath)
-        let todo = todoItems.value[indexPath.row]
-        
-        configureLabel(for: cell, with: todo)
-        configureStatus(for: cell, with: todo)
-        
-        return cell
-    }
-}
-
 // MARK: - 配置cell & 更新UI
 extension TodoListViewController {
-    private func configureLabel(for cell: UITableViewCell, with item: TodoItem) {
+    func configureLabel(for cell: UITableViewCell, with item: TodoItem) {
         let label = cell.viewWithTag(CELL_TODO_TITLE_TAG) as! UILabel
         label.text = item.name
     }
     
-    private func configureStatus(for cell: UITableViewCell, with item: TodoItem) {
+    func configureStatus(for cell: UITableViewCell, with item: TodoItem) {
         let label = cell.viewWithTag(CELL_CHECKMARK_TAG) as! UILabel
         label.text = item.isFinished ? "✅" : ""
     }
@@ -131,36 +99,3 @@ extension TodoListViewController {
         tableView.reloadData()
     }
 }
-
-// MARK: - 数据处理
-extension TodoListViewController {
-    /// 加载todoItems
-    private func loadTodoItems() {
-        let path = dataFilePath()
-        
-        if let data = try? Data(contentsOf: path) {
-            let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
-            todoItems.value = unarchiver.decodeObject(forKey: TODO_ITEMS_KEY) as! [TodoItem]
-            unarchiver.finishDecoding()
-        }
-    }
-    
-    /// 保存todoItems
-    private func saveTodoItems() {
-        let data = NSMutableData()
-        let archiver = NSKeyedArchiver(forWritingWith: data)
-        archiver.encode(todoItems.value, forKey: TODO_ITEMS_KEY)
-        archiver.finishEncoding()
-        data.write(to: dataFilePath(), atomically: true)
-    }
-    
-    private func documentsDirectory() -> URL {
-        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return path[0]
-    }
-    
-    private func dataFilePath() -> URL {
-        return documentsDirectory().appendingPathComponent("TodoList.plist")
-    }
-}
-
