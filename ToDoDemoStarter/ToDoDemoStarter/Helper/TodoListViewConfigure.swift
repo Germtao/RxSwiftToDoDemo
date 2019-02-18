@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxSwift
 
 let plistPath = "Documents/TodoList.plist"
 
@@ -54,13 +55,23 @@ extension TodoListViewController {
         }
     }
     
-    /// 保存todoItems
-    func saveTodoItems() {
+    /// 保存todoItems, 返回一个 自定义事件序列
+    func saveTodoItems() -> Observable<Void> {
         let data = NSMutableData()
         let archiver = NSKeyedArchiver(forWritingWith: data)
         archiver.encode(todoItems.value, forKey: TODO_ITEMS_KEY)
         archiver.finishEncoding()
-        data.write(to: dataFilePath(), atomically: true)
+        
+        return Observable.create({ (observer) -> Disposable in
+            // data.write(to:atomically:)方法是有可能执行失败的，失败的时候，它会返回false
+            let result = data.write(to: self.dataFilePath(), atomically: true)
+            if result {
+                observer.onCompleted()
+            } else {
+                observer.onError(SaveTodoError.cannotSaveToLocalFile)
+            }
+            return Disposables.create()
+        })
     }
 }
 

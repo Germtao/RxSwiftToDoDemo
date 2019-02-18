@@ -52,7 +52,13 @@ class TodoListViewController: UIViewController {
     }
     
     @IBAction func saveTodoList(_ sender: UIButton) {
-        saveTodoItems()
+        saveTodoItems().subscribe(onError: { [weak self] (error) in
+            self?.flash(title: "错误", message: error.localizedDescription)
+            }, onCompleted: { [weak self] in
+                self?.flash(title: "成功", message: "所有的任务已保存到手机！")
+        }).dispose()
+        // 如果一个Controller会常驻在内存里不会释放，我们就不要把这种单次事件的订阅对象放到它的DisposeBag里
+        print("RC: \(RxSwift.Resources.total)")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
