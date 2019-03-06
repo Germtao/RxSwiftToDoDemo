@@ -22,7 +22,9 @@ class OperatorViewController: UIViewController {
         
 //        operatorEvent()
         
-        dispose()
+//        dispose()
+        
+        creatOperator()
         
     }
 }
@@ -93,5 +95,41 @@ extension OperatorViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             closure()
         }
+    }
+}
+
+// MARK: - 理解 create 和 debug operator
+extension OperatorViewController {
+    
+    enum CustomError: Error {
+        case somethingError
+    }
+    
+    private func creatOperator() {
+        
+        /**
+         create(<#T##subscribe: (AnyObserver<Int>) -> Disposable##(AnyObserver<Int>) -> Disposable#>)
+             subscribe并不是指事件真正的订阅者，而是用来定义当有人订阅Observable中的事件时，
+             应该如何向订阅者发送不同情况的事件，理解这个问题，是使用create的关键
+         */
+        let customOb = Observable<Int>.create { (observer) in
+            observer.onNext(10)
+            
+            // 最后，在订阅的时候，我们可以直接通过onError来得到错误通知：
+            observer.onError(CustomError.somethingError)
+            
+            observer.onNext(11)
+            
+            observer.onCompleted()
+            
+            return Disposables.create() // 用这个对象取消订阅进而回收customOb占用的资源
+        }
+        
+        let bag = DisposeBag()
+        customOb.subscribe(
+            onNext: { print($0) },
+            onError: { print($0) },
+            onCompleted: { print("Completed") },
+            onDisposed: { print("Game Over") }).disposed(by: bag)
     }
 }
