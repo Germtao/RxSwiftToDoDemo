@@ -11,6 +11,9 @@ import RxSwift
 
 class TodoDetailViewController: UITableViewController {
     
+    private var todoCollage: UIImage?
+    @IBOutlet weak var memoCollageBtn: UIButton!
+    
     /// 作为Observer, 发布事件给订阅者
     private let todoSubject = PublishSubject<TodoItem>()
     /// 作为Observerable, 订阅外部发送的事件

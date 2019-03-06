@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3BE0A7E7222FCDA700507DFB /* PhotoCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE0A7E6222FCDA700507DFB /* PhotoCollectionViewController.swift */; };
+		3BE0A7E9222FCF2900507DFB /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE0A7E8222FCF2900507DFB /* PhotoCell.swift */; };
+		3BE0A7EB222FD09500507DFB /* UIImage+Collage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE0A7EA222FD09500507DFB /* UIImage+Collage.swift */; };
 		71CCE65B221A7DBD00204142 /* PlistDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CCE65A221A7DBD00204142 /* PlistDocument.swift */; };
 		71CCE65E221A808100204142 /* TodoListViewConfigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CCE65D221A808100204142 /* TodoListViewConfigure.swift */; };
 		71CCE660221A852100204142 /* TodoListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CCE65F221A852100204142 /* TodoListTableView.swift */; };
@@ -24,6 +27,9 @@
 
 /* Begin PBXFileReference section */
 		188FC1439867C8E2A617309B /* Pods-ToDoDemoStarter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoDemoStarter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ToDoDemoStarter/Pods-ToDoDemoStarter.debug.xcconfig"; sourceTree = "<group>"; };
+		3BE0A7E6222FCDA700507DFB /* PhotoCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewController.swift; sourceTree = "<group>"; };
+		3BE0A7E8222FCF2900507DFB /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
+		3BE0A7EA222FD09500507DFB /* UIImage+Collage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Collage.swift"; sourceTree = "<group>"; };
 		71CCE659221A7C7F00204142 /* ToDoDemoStarter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ToDoDemoStarter.entitlements; sourceTree = "<group>"; };
 		71CCE65A221A7DBD00204142 /* PlistDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistDocument.swift; sourceTree = "<group>"; };
 		71CCE65D221A808100204142 /* TodoListViewConfigure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewConfigure.swift; sourceTree = "<group>"; };
@@ -78,6 +84,7 @@
 				71CCE65D221A808100204142 /* TodoListViewConfigure.swift */,
 				71CCE65F221A852100204142 /* TodoListTableView.swift */,
 				71CCE661221A87FA00204142 /* Flash.swift */,
+				3BE0A7EA222FD09500507DFB /* UIImage+Collage.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -122,6 +129,8 @@
 			children = (
 				71D67A96221271D20036E3DB /* TodoListViewController.swift */,
 				71D67AAD2212C41B0036E3DB /* TodoDetailViewController.swift */,
+				3BE0A7E6222FCDA700507DFB /* PhotoCollectionViewController.swift */,
+				3BE0A7E8222FCF2900507DFB /* PhotoCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -261,7 +270,10 @@
 				71D67A97221271D20036E3DB /* TodoListViewController.swift in Sources */,
 				71D67AAE2212C41B0036E3DB /* TodoDetailViewController.swift in Sources */,
 				71D67AA7221296CD0036E3DB /* TodoItem.swift in Sources */,
+				3BE0A7EB222FD09500507DFB /* UIImage+Collage.swift in Sources */,
+				3BE0A7E7222FCDA700507DFB /* PhotoCollectionViewController.swift in Sources */,
 				71CCE662221A87FA00204142 /* Flash.swift in Sources */,
+				3BE0A7E9222FCF2900507DFB /* PhotoCell.swift in Sources */,
 				71CCE660221A852100204142 /* TodoListTableView.swift in Sources */,
 				71CCE65B221A7DBD00204142 /* PlistDocument.swift in Sources */,
 				71D67A95221271D20036E3DB /* AppDelegate.swift in Sources */,

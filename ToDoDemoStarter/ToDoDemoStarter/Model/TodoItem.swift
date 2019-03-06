@@ -11,6 +11,9 @@ import UIKit
 // MARK: - 遵从NSCoding的类, 便于序列化成 plist 保存和加载
 class TodoItem: NSObject, NSCoding {
     
+    /// 表示每一个todo对应的图片名, 默认 空
+    var pictureMemoFileName = ""
+    
     private let kName = "Name"
     private let kIsFinished = "isFinished"
     
