@@ -216,7 +216,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ToDoDemoStarter/Pods-ToDoDemoStarter-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ToDoDemoStarter/Pods-ToDoDemoStarter-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
@@ -229,7 +229,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ToDoDemoStarter/Pods-ToDoDemoStarter-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ToDoDemoStarter/Pods-ToDoDemoStarter-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		5C3BE848F6595E223CF9A6CC /* [CP] Check Pods Manifest.lock */ = {
