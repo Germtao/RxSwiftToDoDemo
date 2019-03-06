@@ -8,21 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		3B3CC56B222F6D7400E6FC8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CC56A222F6D7400E6FC8A /* AppDelegate.swift */; };
-		3B3CC56D222F6D7400E6FC8A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CC56C222F6D7400E6FC8A /* ViewController.swift */; };
+		3B3CC56D222F6D7400E6FC8A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CC56C222F6D7400E6FC8A /* MainViewController.swift */; };
 		3B3CC570222F6D7400E6FC8A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B3CC56E222F6D7400E6FC8A /* Main.storyboard */; };
 		3B3CC572222F6D7700E6FC8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B3CC571222F6D7700E6FC8A /* Assets.xcassets */; };
 		3B3CC575222F6D7700E6FC8A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B3CC573222F6D7700E6FC8A /* LaunchScreen.storyboard */; };
+		3BE0A7E1222F741E00507DFB /* MainViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE0A7E0222F741E00507DFB /* MainViewCell.swift */; };
+		3BE0A7E3222F772C00507DFB /* OperatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE0A7E2222F772C00507DFB /* OperatorViewController.swift */; };
 		DCF91224AD62C8C5C752F984 /* Pods_RxSwiftDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 914F6C857AAB5AB1C571B844 /* Pods_RxSwiftDemo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3B3CC567222F6D7400E6FC8A /* RxSwiftDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RxSwiftDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3CC56A222F6D7400E6FC8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3B3CC56C222F6D7400E6FC8A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3B3CC56C222F6D7400E6FC8A /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		3B3CC56F222F6D7400E6FC8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3B3CC571222F6D7700E6FC8A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3B3CC574222F6D7700E6FC8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3B3CC576222F6D7700E6FC8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3BE0A7E0222F741E00507DFB /* MainViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewCell.swift; sourceTree = "<group>"; };
+		3BE0A7E2222F772C00507DFB /* OperatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatorViewController.swift; sourceTree = "<group>"; };
 		3C56B30F37B66480F3F7121A /* Pods-RxSwiftDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxSwiftDemo.debug.xcconfig"; path = "Target Support Files/Pods-RxSwiftDemo/Pods-RxSwiftDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		914F6C857AAB5AB1C571B844 /* Pods_RxSwiftDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RxSwiftDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A86FD1329842859E3DC54C76 /* Pods-RxSwiftDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxSwiftDemo.release.xcconfig"; path = "Target Support Files/Pods-RxSwiftDemo/Pods-RxSwiftDemo.release.xcconfig"; sourceTree = "<group>"; };
@@ -61,14 +65,56 @@
 		3B3CC569222F6D7400E6FC8A /* RxSwiftDemo */ = {
 			isa = PBXGroup;
 			children = (
-				3B3CC56A222F6D7400E6FC8A /* AppDelegate.swift */,
-				3B3CC56C222F6D7400E6FC8A /* ViewController.swift */,
-				3B3CC56E222F6D7400E6FC8A /* Main.storyboard */,
-				3B3CC571222F6D7700E6FC8A /* Assets.xcassets */,
-				3B3CC573222F6D7700E6FC8A /* LaunchScreen.storyboard */,
-				3B3CC576222F6D7700E6FC8A /* Info.plist */,
+				3BE0A7DB222F73B200507DFB /* Delegates */,
+				3BE0A7DC222F73BB00507DFB /* ViewControllers */,
+				3BE0A7DD222F73CD00507DFB /* Storyboards */,
+				3BE0A7DE222F73DF00507DFB /* SupportFiles */,
 			);
 			path = RxSwiftDemo;
+			sourceTree = "<group>";
+		};
+		3BE0A7DB222F73B200507DFB /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				3B3CC56A222F6D7400E6FC8A /* AppDelegate.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
+		3BE0A7DC222F73BB00507DFB /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				3BE0A7DF222F740400507DFB /* TableViewCells */,
+				3B3CC56C222F6D7400E6FC8A /* MainViewController.swift */,
+				3BE0A7E2222F772C00507DFB /* OperatorViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		3BE0A7DD222F73CD00507DFB /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				3B3CC56E222F6D7400E6FC8A /* Main.storyboard */,
+				3B3CC573222F6D7700E6FC8A /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		3BE0A7DE222F73DF00507DFB /* SupportFiles */ = {
+			isa = PBXGroup;
+			children = (
+				3B3CC571222F6D7700E6FC8A /* Assets.xcassets */,
+				3B3CC576222F6D7700E6FC8A /* Info.plist */,
+			);
+			path = SupportFiles;
+			sourceTree = "<group>";
+		};
+		3BE0A7DF222F740400507DFB /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				3BE0A7E0222F741E00507DFB /* MainViewCell.swift */,
+			);
+			path = TableViewCells;
 			sourceTree = "<group>";
 		};
 		4A8C668A42B5E4D7B2151BE5 /* Frameworks */ = {
@@ -85,7 +131,6 @@
 				3C56B30F37B66480F3F7121A /* Pods-RxSwiftDemo.debug.xcconfig */,
 				A86FD1329842859E3DC54C76 /* Pods-RxSwiftDemo.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -213,7 +258,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B3CC56D222F6D7400E6FC8A /* ViewController.swift in Sources */,
+				3BE0A7E1222F741E00507DFB /* MainViewCell.swift in Sources */,
+				3B3CC56D222F6D7400E6FC8A /* MainViewController.swift in Sources */,
+				3BE0A7E3222F772C00507DFB /* OperatorViewController.swift in Sources */,
 				3B3CC56B222F6D7400E6FC8A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,7 +409,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = RxSwiftDemo/Info.plist;
+				INFOPLIST_FILE = RxSwiftDemo/SupportFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -380,7 +427,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = RxSwiftDemo/Info.plist;
+				INFOPLIST_FILE = RxSwiftDemo/SupportFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
