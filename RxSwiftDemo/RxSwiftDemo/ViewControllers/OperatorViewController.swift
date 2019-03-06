@@ -126,10 +126,34 @@ extension OperatorViewController {
         }
         
         let bag = DisposeBag()
-        customOb.subscribe(
-            onNext: { print($0) },
-            onError: { print($0) },
-            onCompleted: { print("Completed") },
-            onDisposed: { print("Game Over") }).disposed(by: bag)
+        //如果我们怀疑某个串联的环节发生了问题，就可以插入一个do operator进行观察
+//        customOb.do(onNext: { print("Intercepted: \($0)") },
+//                    onError: { print("Intercepted: \($0)") },
+//                    onCompleted: { print("Intercepted: Completed") },
+//                    onDispose: { print("Intercepted: Game Over") })
+//            .subscribe(
+//                onNext: { print($0) },
+//                onError: { print($0) },
+//                onCompleted: { print("Completed") },
+//                onDisposed: { print("Game Over") }).disposed(by: bag)
+        
+        // 用do进行调试并不方便，毕竟还要写一堆的on，再配上各自的closure，应该有一个专门可以穿插在各种operator之间进行调试的operator。
+        // 实际上，do也的确不是为了调试而生的，我们只是借用了它的“旁路”特性而已。
+        // RxSwift提供了一个调试专属的operator，叫做debug，它可以安插在任意一个需要确认事件值的地方，像这样
+        customOb.debug()
+            .subscribe(
+                onNext: { print($0) },
+                onError: { print($0) },
+                onCompleted: { print("Completed") },
+                onDisposed: { print("Game Over") })
+            .disposed(by: bag)
     }
 }
+
+/**
+ 实际上，这些带给我们异步感觉的操作，都需要在运行时动态给Observable添加内容。
+ 这也就意味着，这种Observable要有双重身份：
+     1. 一方面，它自身得是一个订阅者以获得系统事件的通知；
+     2. 另一方面，它也得是一个Observable，供我们编写的客户端代码进行订阅。
+ 在Rx的世界里，这样具有双重身份的对象，有一个专属的名字，叫做Subject。因此，在用更真实的方式学习RxSwift之前，我们还需要额外做些工作
+ */
