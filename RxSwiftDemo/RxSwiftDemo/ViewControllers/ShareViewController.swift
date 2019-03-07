@@ -15,7 +15,16 @@ class ShareViewController: UIViewController {
         super.viewDidLoad()
 
 //        share_1()
-        share_2()
+//        share_2()
+        
+//        toArray()
+//        toArray1()
+        
+//        scan()
+//        scan1()
+        
+//        map()
+        map1()
     }
 }
 
@@ -60,5 +69,105 @@ extension ShareViewController {
         
         numbers.subscribe(onNext: { print($0) }).disposed(by: bag)
         numbers.subscribe(onNext: { print($0) }).disposed(by: bag)
+    }
+}
+
+// MARK: - 常用的transform operators
+extension ShareViewController {
+    // MARK: - toArray
+    private func toArray() {
+        let bag = DisposeBag()
+        
+        Observable.of(1, 2, 3, 4)
+            .toArray().subscribe(onNext: {
+                // Array<Int>
+                print(type(of: $0))
+                // [1, 2, 3, 4]
+                print($0)
+            }).disposed(by: bag)
+    }
+    
+    /**
+         toArray的转换，是在原始Observable结束的时候，把原始Observable中所有的事件值变成一个数组，
+         只要原始Observable不结束，这个转换就不会发生
+     */
+    private func toArray1() {
+        let bag = DisposeBag()
+        let numbers = PublishSubject<Int>()
+        
+        numbers.asObservable()
+            .toArray()
+            .subscribe(onNext: {
+                print($0)
+            })
+            .disposed(by: bag)
+        
+        numbers.onNext(1)
+        numbers.onNext(2)
+        numbers.onNext(3)
+        
+        numbers.onCompleted()
+    }
+    
+    // MARK: - scan
+    /**
+     给它设定一个初始值之后, 可以对Observable序列中的每一个事件进行'累加', 最终订阅到的, 是'累加'之后的结果
+     */
+    private func scan() {
+        let bag = DisposeBag()
+        Observable.of(1, 2, 3).scan(0) { (accumulatedValue, value) in
+            accumulatedValue + value
+        }.subscribe(onNext: {
+            print($0)
+        }).disposed(by: bag)
+        
+        /**
+         结果: 1   3   6  和toArray不同的是, scand在Observable每次有事件的时候都会执行
+         */
+    }
+    
+    private func scan1() {
+        let bag = DisposeBag()
+        let numbers = PublishSubject<Int>()
+        numbers.asObservable()
+            .scan(0) { $0 + $1 }
+            .subscribe(onNext: {
+                print("Scan: \($0)")
+            }).disposed(by: bag)
+        
+        numbers.onNext(1)
+        numbers.onNext(1)
+    }
+}
+
+// MARK: - 转换事件类型的map
+extension ShareViewController {
+    /**
+     除了把事件进行'累加'外, 也可以更自由的定义事件变换的行为
+     */
+    private func map() {
+        Observable.of(1, 2, 3).map { (value) in
+            value * 2
+        }.subscribe(onNext: {
+            print($0)
+        }).dispose()
+        
+        /**
+         结果: 2  4  6
+         
+         订阅到的是事件被 map 之后的Observable。map 接受一个closure, 而这个closure的参数, 就是原Observable中的事件值
+         */
+    }
+    
+    private func map1() {
+        Observable.of(1, 2, 3).enumerated().map { (index, value) in
+            index < 1 ? value : value * 2
+        }.subscribe(onNext: {
+            print($0)
+        }).dispose()
+        
+        /**
+         结果: 1  4  6
+         */
     }
 }

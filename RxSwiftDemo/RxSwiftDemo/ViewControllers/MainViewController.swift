@@ -43,7 +43,7 @@ extension MainViewController {
         case .subject:
             return "Subject"
         case .share:
-            return "Share"
+            return "Share/Transform"
         }
     }
 }
