@@ -32,6 +32,41 @@ class PhotoCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
 
         setCellSpace()
+        
+        /**
+         这个过程要比我们想象的复杂一点，我们不能直接订阅isAuthorized的onNext并处理true/false的情况，因为单一的事件值并不能反映真实的授权情况。按照之前分析的:
+             1. 授权成功的序列可能是：.next(true)，.completed或.next(false)，.next(true)，.completed
+             2. 授权失败的序列则是：.next(false)，.next(false)，.completed
+         因此，我们需要把isAuthorized这个事件序列处理一下，分别处理授权成功和失败的情况
+         */
+        
+        // 订阅成功事件
+        let isAuthorized = PHPhotoLibrary.isAuthorized
+        isAuthorized.skipWhile { $0 == false }  // skipWhile和take模拟了忽略所有false并读取第一个true这个动作
+            .take(1)
+            .observeOn(MainScheduler.instance)  // 表示了在主线程中执行订阅代码
+            .subscribe(onNext: { [weak self] _ in
+            // reload the photo collection view
+                if let `self` = self {
+                    self.photos = PhotoCollectionViewController.loadPhotos()
+                    self.collectionView.reloadData()
+//                    DispatchQueue.main.async {  // 传递给requestAuthorization的closure参数有可能并不在主线程中执行，一旦如此，我们订阅的授权结果的代码也就不会在主线程中执行
+//                        self.collectionView.reloadData()
+//                    }
+                }
+            })
+            .disposed(by: bag)
+        
+        // 订阅失败事件
+        isAuthorized
+            .distinctUntilChanged()
+            .take(1)
+            .filter { $0 == false }
+            .subscribe(onNext: { [weak self] _ in
+                self?.flash(title: "不能访问相册", message: "系统设置中授权相册", callback: { [weak self] _ in
+                    self?.navigationController?.popViewController(animated: true)
+                })
+            }).disposed(by: bag)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -108,3 +143,4 @@ extension PhotoCollectionViewController {
         }
     }
 }
+
