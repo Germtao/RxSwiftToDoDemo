@@ -92,8 +92,21 @@ class TodoDetailViewController: UITableViewController {
         let selectedPhotos = photoCollectionVc.selectedPhotos.share()  // 多次订阅时共享事件
         
         // 从selectedPhotos中订阅到用户选择的所有图片
-        selectedPhotos.subscribe(onNext: { image in
-            self.images.value.append(image)
+        /**
+         scan的初始值是一个空的数组，然后selectedPhotos中每发生一次图片选中事件，
+         我们就检查图片是否已经添加过了，如果加过就删掉，否则就添加进来。处理完之后，我们把当前所有合并的[UIImage]返回
+        */
+        selectedPhotos.scan([]) { (photos: [UIImage], newPhoto) in
+            var newPhotos = photos
+            
+            if let index = newPhotos.firstIndex(where: { UIImage.isEqual(lhs: newPhoto, rhs: $0) }) {
+                newPhotos.remove(at: index)
+            } else {
+                newPhotos.append(newPhoto)
+            }
+            return newPhotos
+        }.subscribe(onNext: { images in
+            self.images.value = images
         }, onDisposed: {
             print("Finished choose photo memos.")
         }).disposed(by: photoCollectionVc.bag)
