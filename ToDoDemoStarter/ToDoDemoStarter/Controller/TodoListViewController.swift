@@ -120,9 +120,9 @@ extension TodoListViewController {
     }
     
     private func updateUI(todos: [TodoItem]) {
-//        clearBtn.isEnabled = !todos.isEmpty
-//        addItem.isEnabled = todos.filter({ !$0.isFinished }).count < 5
-//        title = todos.isEmpty ? "Todo" : "\(todos.count) Todos"
+        clearBtn.isEnabled = !todos.isEmpty
+        addItem.isEnabled = todos.filter({ !$0.isFinished }).count < 5
+        title = todos.isEmpty ? "Todo" : "\(todos.count) Todos"
         
         tableView.reloadData()
     }

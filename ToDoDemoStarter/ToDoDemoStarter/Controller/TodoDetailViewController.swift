@@ -89,13 +89,17 @@ class TodoDetailViewController: UITableViewController {
         images.value.removeAll()
         resetMemoButton()
         
-        let selectedPhotos = photoCollectionVc.selectedPhotos
+        let selectedPhotos = photoCollectionVc.selectedPhotos.share()  // 多次订阅时共享事件
         
         // 从selectedPhotos中订阅到用户选择的所有图片
         selectedPhotos.subscribe(onNext: { image in
             self.images.value.append(image)
         }, onDisposed: {
             print("Finished choose photo memos.")
+        }).disposed(by: photoCollectionVc.bag)
+        
+        selectedPhotos.ignoreElements().subscribe(onCompleted: {
+            self.setMemoSectionHeaderText()
         }).disposed(by: photoCollectionVc.bag)
     }
     
@@ -153,6 +157,15 @@ extension TodoDetailViewController {
     override func tableView(_ tableView: UITableView,
                             willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         return nil
+    }
+    
+    /// 设置Memo header
+    private func setMemoSectionHeaderText() {
+        guard !images.value.isEmpty, let header = tableView.headerView(forSection: 2) else {
+            return
+        }
+        
+        header.textLabel?.text = "\(images.value.count) MEMOS"
     }
 }
 
