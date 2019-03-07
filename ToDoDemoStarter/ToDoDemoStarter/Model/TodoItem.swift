@@ -16,6 +16,7 @@ class TodoItem: NSObject, NSCoding {
     
     private let kName = "Name"
     private let kIsFinished = "isFinished"
+    private let kFileName = "pictureMemoFileName"
     
     /// todo标题
     var name: String = ""
@@ -26,19 +27,22 @@ class TodoItem: NSObject, NSCoding {
         super.init()
     }
     
-    init(name: String, isFinished: Bool) {
+    init(name: String, isFinished: Bool, pictureMemoFileName: String) {
         self.name = name
         self.isFinished = isFinished
+        self.pictureMemoFileName = pictureMemoFileName
     }
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(name, forKey: kName)
         aCoder.encode(isFinished, forKey: kIsFinished)
+        aCoder.encode(pictureMemoFileName, forKey: kFileName)
     }
     
     required init?(coder aDecoder: NSCoder) {
         name = aDecoder.decodeObject(forKey: kName) as! String
         isFinished = aDecoder.decodeBool(forKey: kIsFinished)
+        pictureMemoFileName = aDecoder.decodeObject(forKey: kFileName) as! String
         
         super.init()
     }

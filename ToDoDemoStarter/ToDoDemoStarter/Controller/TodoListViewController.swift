@@ -43,8 +43,6 @@ class TodoListViewController: UIViewController {
     }
     
     @IBAction func addTodoItem(_ sender: UIBarButtonItem) {
-        let todoItem = TodoItem(name: "Todo Demo", isFinished: false)
-        todoItems.value.append(todoItem)
     }
     
     @IBAction func clearTodoList(_ sender: UIButton) {
@@ -122,6 +120,10 @@ extension TodoListViewController {
     }
     
     private func updateUI(todos: [TodoItem]) {
+//        clearBtn.isEnabled = !todos.isEmpty
+//        addItem.isEnabled = todos.filter({ !$0.isFinished }).count < 5
+//        title = todos.isEmpty ? "Todo" : "\(todos.count) Todos"
+        
         tableView.reloadData()
     }
 }

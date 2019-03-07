@@ -8,10 +8,17 @@
 
 import UIKit
 import Photos
+import RxSwift
 
 private let reuseIdentifier = "Cell"
 
 class PhotoCollectionViewController: UICollectionViewController {
+    
+    private let selectedPhotosSubject = PublishSubject<UIImage>()
+    var selectedPhotos: Observable<UIImage> {
+        return selectedPhotosSubject.asObservable()
+    }
+    let bag = DisposeBag()
     
     private lazy var photos = PhotoCollectionViewController.loadPhotos()
     private lazy var imageManager = PHCachingImageManager()
@@ -25,6 +32,12 @@ class PhotoCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
 
         setCellSpace()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        selectedPhotosSubject.onCompleted()
     }
 }
 
@@ -81,12 +94,17 @@ extension PhotoCollectionViewController {
             cell.selected()
         }
         
-        imageManager.requestImage(for: asset, targetSize: view.frame.size, contentMode: .aspectFill, options: nil) { (image, info) in
-            guard let image = image, let info = info else { return }
+        imageManager.requestImage(for: asset,
+                                  targetSize: view.frame.size,
+                                  contentMode: .aspectFill,
+                                  options: nil) { [weak self] (image, info) in
+                                    
+                                    guard let image = image, let info = info else { return }
             
-            if let isThumbnail = info[PHImageResultIsDegradedKey] as? Bool, !isThumbnail {
-                // TODO:
-            }
+                                    if let isThumbnail = info[PHImageResultIsDegradedKey] as? Bool, !isThumbnail {
+                                        // 如果图片库中的图片不是iCloud中的缩略图，则触发事件
+                                        self?.selectedPhotosSubject.onNext(image)
+                                    }
         }
     }
 }

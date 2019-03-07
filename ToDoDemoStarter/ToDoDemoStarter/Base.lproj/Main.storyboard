@@ -112,7 +112,6 @@
                     <navigationItem key="navigationItem" title="Todo" id="NU5-EP-dK9">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="ebH-JX-Lg7">
                             <connections>
-                                <action selector="addTodoItem:" destination="BYZ-38-t0r" id="v6I-m3-gxA"/>
                                 <segue destination="gKe-b5-jno" kind="presentation" identifier="AddTodo" id="Vqa-Q1-zbs"/>
                             </connections>
                         </barButtonItem>
@@ -245,6 +244,7 @@
                     <connections>
                         <outlet property="doneItem" destination="Nxs-rv-Ipu" id="rMq-Xm-J91"/>
                         <outlet property="finishedSwitch" destination="KVO-2E-cy1" id="okb-45-wb9"/>
+                        <outlet property="memoCollageBtn" destination="hDz-8W-KnB" id="yHn-xC-L9h"/>
                         <outlet property="todoName" destination="8Jv-bY-ft6" id="srm-yy-hms"/>
                     </connections>
                 </tableViewController>
@@ -252,10 +252,10 @@
             </objects>
             <point key="canvasLocation" x="1680.8" y="-582.45877061469275"/>
         </scene>
-        <!--Collection View Controller-->
+        <!--Photo Collection View Controller-->
         <scene sceneID="ffj-uG-GOY">
             <objects>
-                <collectionViewController id="8qf-mn-0a6" sceneMemberID="viewController">
+                <collectionViewController id="8qf-mn-0a6" customClass="PhotoCollectionViewController" customModule="ToDoDemoStarter" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="lId-vS-plu">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
