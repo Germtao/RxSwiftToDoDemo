@@ -77,6 +77,35 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection id="Tfp-Oj-JH0">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MainViewCell" id="3n8-Mg-iJ4" customClass="MainViewCell" customModule="RxSwiftDemo" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="195" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3n8-Mg-iJ4" id="hM1-vg-aPS">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sMn-re-f2p">
+                                                    <rect key="frame" x="16" y="11.5" width="343" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="sMn-re-f2p" firstAttribute="leading" secondItem="hM1-vg-aPS" secondAttribute="leadingMargin" id="1bC-mU-5g3"/>
+                                                <constraint firstItem="sMn-re-f2p" firstAttribute="centerY" secondItem="hM1-vg-aPS" secondAttribute="centerY" id="Rx5-3P-wh2"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="sMn-re-f2p" secondAttribute="trailing" id="nPu-Wd-aOF"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="label" destination="sMn-re-f2p" id="t4x-6K-0EJ"/>
+                                            <segue destination="yxQ-wl-Hbx" kind="show" id="iWW-76-PTZ"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="mmR-RP-l35" id="PdH-LF-VHg"/>
@@ -88,6 +117,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lol-0T-EAo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1025" y="143"/>
+        </scene>
+        <!--Share-->
+        <scene sceneID="XKx-50-0bK">
+            <objects>
+                <viewController id="yxQ-wl-Hbx" customClass="ShareViewController" customModule="RxSwiftDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="07T-zC-zs1">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="ao5-qd-Ust"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Share" id="Y2x-aM-qMp"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zQU-D1-UOz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1025" y="850"/>
         </scene>
         <!--Subject-->
         <scene sceneID="plb-U5-Z36">

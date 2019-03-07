@@ -29,6 +29,7 @@ extension MainViewController {
     enum Section: Int {
         case observable
         case subject
+        case share
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -41,6 +42,8 @@ extension MainViewController {
             return "Observable"
         case .subject:
             return "Subject"
+        case .share:
+            return "Share"
         }
     }
 }
