@@ -18,6 +18,18 @@ class PhotoCell: UICollectionViewCell {
     var representedAssetIdentifier: String!
     var isCheckmarked: Bool = false
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        checkmark.alpha = 0
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        imageView.image = nil
+    }
+    
     private func flipCheckmark() {
         isCheckmarked = !isCheckmarked
     }

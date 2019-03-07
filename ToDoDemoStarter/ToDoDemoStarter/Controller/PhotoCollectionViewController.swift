@@ -15,7 +15,7 @@ class PhotoCollectionViewController: UICollectionViewController {
     
     private lazy var photos = PhotoCollectionViewController.loadPhotos()
     private lazy var imageManager = PHCachingImageManager()
-    lazy var thumbnailsize: CGSize = {
+    private lazy var thumbnailsize: CGSize = {
         let cellSize = (self.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
         return CGSize(width: cellSize.width * UIScreen.main.scale,
                       height: cellSize.height * UIScreen.main.scale)
