@@ -10,21 +10,45 @@ import UIKit
 import RxSwift
 
 class ShareViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-//        share_1()
-//        share_2()
-        
-//        toArray()
-//        toArray1()
-        
-//        scan()
-//        scan1()
-        
-//        map()
-        map1()
+    
+    @IBOutlet weak var label: UILabel!
+    
+    enum SenderText: String {
+        case share = "Share"
+        case share1 = "Share1"
+        case toArray = "toArray"
+        case toArray1 = "toArray1"
+        case scan = "Scan"
+        case scan1 = "Scan1"
+        case map = "Map"
+        case map1 = "Map1"
+        case flatMap = "FlatMap"
+    }
+    
+    @IBAction func buttonClicked(_ sender: UIButton) {
+        guard let text = sender.titleLabel?.text,
+            let senderText = SenderText(rawValue: text) else {
+            fatalError("Unexpected Sender")
+        }
+        switch senderText {
+        case .share:
+            share_1()
+        case .share1:
+            share_2()
+        case .toArray:
+            toArray()
+        case .toArray1:
+            toArray1()
+        case .scan:
+            scan()
+        case .scan1:
+            scan1()
+        case .map:
+            map()
+        case .map1:
+            map1()
+        case .flatMap: break
+        }
     }
 }
 
@@ -47,8 +71,17 @@ extension ShareViewController {
         
         let bag = DisposeBag()
         
-        numbers.subscribe(onNext: { print($0) }).disposed(by: bag)
-        numbers.subscribe(onNext: { print($0) }).disposed(by: bag)
+        var string = ""
+        numbers.subscribe(onNext: {
+            string = string + "\n" + "\($0)"
+            self.label.text = string
+            print($0)
+        }).disposed(by: bag)
+        numbers.subscribe(onNext: {
+            string = string + "\n" + "\($0)"
+            self.label.text = string
+            print($0)
+        }).disposed(by: bag)
     }
     
     /**
@@ -66,9 +99,17 @@ extension ShareViewController {
         }.share()
         
         let bag = DisposeBag()
-        
-        numbers.subscribe(onNext: { print($0) }).disposed(by: bag)
-        numbers.subscribe(onNext: { print($0) }).disposed(by: bag)
+        var string = ""
+        numbers.subscribe(onNext: {
+            string = string + "\n" + "\($0)"
+            self.label.text = string
+            print($0)
+        }).disposed(by: bag)
+        numbers.subscribe(onNext: {
+            string = string + "\n" + "\($0)"
+            self.label.text = string
+            print($0)
+        }).disposed(by: bag)
     }
 }
 
@@ -83,6 +124,7 @@ extension ShareViewController {
                 // Array<Int>
                 print(type(of: $0))
                 // [1, 2, 3, 4]
+                self.label.text = String(format: "%@", $0)
                 print($0)
             }).disposed(by: bag)
     }
@@ -98,6 +140,7 @@ extension ShareViewController {
         numbers.asObservable()
             .toArray()
             .subscribe(onNext: {
+                self.label.text = String(format: "%@", $0)
                 print($0)
             })
             .disposed(by: bag)
@@ -115,9 +158,12 @@ extension ShareViewController {
      */
     private func scan() {
         let bag = DisposeBag()
+        var string = ""
         Observable.of(1, 2, 3).scan(0) { (accumulatedValue, value) in
             accumulatedValue + value
         }.subscribe(onNext: {
+            string = string + "\n" + "\($0)"
+            self.label.text = string
             print($0)
         }).disposed(by: bag)
         
@@ -128,10 +174,13 @@ extension ShareViewController {
     
     private func scan1() {
         let bag = DisposeBag()
+        var string = ""
         let numbers = PublishSubject<Int>()
         numbers.asObservable()
             .scan(0) { $0 + $1 }
             .subscribe(onNext: {
+                string = string + "\n" + "\($0)"
+                self.label.text = string
                 print("Scan: \($0)")
             }).disposed(by: bag)
         
@@ -146,9 +195,12 @@ extension ShareViewController {
      除了把事件进行'累加'外, 也可以更自由的定义事件变换的行为
      */
     private func map() {
+        var str = ""
         Observable.of(1, 2, 3).map { (value) in
             value * 2
         }.subscribe(onNext: {
+            str = str + "\n" + "\($0)"
+            self.label.text = str
             print($0)
         }).dispose()
         
@@ -160,9 +212,12 @@ extension ShareViewController {
     }
     
     private func map1() {
+        var str = ""
         Observable.of(1, 2, 3).enumerated().map { (index, value) in
             index < 1 ? value : value * 2
         }.subscribe(onNext: {
+            str = str + "\n" + "\($0)"
+            self.label.text = str
             print($0)
         }).dispose()
         
@@ -170,4 +225,9 @@ extension ShareViewController {
          结果: 1  4  6
          */
     }
+}
+
+// MARK: - FlatMap
+extension ShareViewController {
+    
 }
