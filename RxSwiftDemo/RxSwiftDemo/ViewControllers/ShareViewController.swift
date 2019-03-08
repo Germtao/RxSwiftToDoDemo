@@ -23,6 +23,7 @@ class ShareViewController: UIViewController {
         case map = "Map"
         case map1 = "Map1"
         case flatMap = "FlatMap"
+        case flatMapLatest = "FlatMapLatest"
     }
     
     @IBAction func buttonClicked(_ sender: UIButton) {
@@ -47,7 +48,10 @@ class ShareViewController: UIViewController {
             map()
         case .map1:
             map1()
-        case .flatMap: break
+        case .flatMap:
+            flatMap()
+        case .flatMapLatest:
+            flatMapLatest()
         }
     }
 }
@@ -229,5 +233,69 @@ extension ShareViewController {
 
 // MARK: - FlatMap
 extension ShareViewController {
+    struct Player {
+        var score: Variable<Int>
+    }
     
+    /**
+     flatMap的定义拆成两部分:
+         1. 把序列中的事件变成新的 Observable
+         2. 合成所有转换过的序列
+     */
+    private func flatMap() {
+        let bag = DisposeBag()
+        // 创建两个独立的Observable
+        let John = Player(score: Variable(70))
+        let Jole = Player(score: Variable(90))
+        
+        let players = PublishSubject<Player>()
+        
+        var str = ""
+        players.asObservable().flatMap {
+            $0.score.asObservable()
+        }.subscribe(onNext: {
+            str = str + "\n" + "\($0)"
+            self.label.text = str
+            print($0)
+        }).disposed(by: bag)
+        
+        // 此时, John加入到游戏
+        players.onNext(John)
+        John.score.value = 75  // John是player序列中发生的事件, 通过flatMap把它变成了一个Observable<Int>
+        players.onNext(Jole)   // flatten定义: flatMap会把它原序列中的每个事件, 都变换成一个Observable。因此, 再加入了Jole之后, flatMap一共变换出了两个Observable<Int>
+                               // 当在 75 和 80 之间加入Jole时, flatMap 会把Jole中事件的值和John中事件的值合并z到一起, 变成一个Observable<Int>, 这种把两个Observable<Int>变成一个的过程
+        John.score.value = 80
+    }
+    
+    /**
+     flatMapLatest: 类似flatMap
+     
+         当原序列中有新事件发生的时候, flatMapLatest 就会自动取消上一个事件的订阅, 然后转换到新事件的订阅。而flatMap则会保持原序列中的所有事件
+     */
+    private func flatMapLatest() {
+        let bag = DisposeBag()
+        
+        let john = Player(score: Variable(80))
+        let jole = Player(score: Variable(85))
+        
+        let players = PublishSubject<Player>()
+        
+        var str = ""
+        players.asObservable()
+            .flatMapLatest {
+                $0.score.asObservable()
+            }
+            .subscribe(onNext: {
+                str = str + "\n" + "\($0)"
+                self.label.text = str
+                print($0)
+            })
+            .disposed(by: bag)
+        
+        players.onNext(john)
+        
+        john.score.value = 75
+        players.onNext(jole)    // players发生jole事件之后, flatMapLatest就取消了对john的订阅
+        john.score.value = 80
+    }
 }
