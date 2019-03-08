@@ -24,6 +24,7 @@ class ShareViewController: UIViewController {
         case map1 = "Map1"
         case flatMap = "FlatMap"
         case flatMapLatest = "FlatMapLatest"
+        case debug = "Debug"
     }
     
     @IBAction func buttonClicked(_ sender: UIButton) {
@@ -52,6 +53,8 @@ class ShareViewController: UIViewController {
             flatMap()
         case .flatMapLatest:
             flatMapLatest()
+        case .debug:
+            debugRxSwift()
         }
     }
 }
@@ -297,5 +300,35 @@ extension ShareViewController {
         john.score.value = 75
         players.onNext(jole)    // players发生jole事件之后, flatMapLatest就取消了对john的订阅
         john.score.value = 80
+    }
+}
+
+// MARK: - 使用materialize和dematerialize观察事件序列
+extension ShareViewController {
+    /** 调试RxSwift代码时, 很有用的operators: materialize 和 dematerialize
+     
+         materialize - 可以把一个Observable的所有事件: .next、.complete和.error都变成另一个Observable的.next事件
+                       如此, 只要观察这个转化过的Observable, 就会知道之前的Observable从开始到结束的所有过程
+     
+         dematerialize - 把这个转化过的Observable变回原来的样子
+     */
+    private func debugRxSwift() {
+        let bag = DisposeBag()
+        
+//        Observable.just(1).subscribe(onNext: {
+//            print("Subscribe: \($0)")
+//        }).disposed(by: bag)   // 结果：  Subscribe: 1
+        
+        Observable.just(1)
+            .materialize()
+            .do(onNext: { print("Do: \($0)") })
+            .dematerialize()
+            .subscribe(onNext: { print("Subscribe: \($0)") })
+            .disposed(by: bag)
+        /**
+         结果: Do: next(1)
+              Subscribe: 1
+              Do: completed
+         */
     }
 }
